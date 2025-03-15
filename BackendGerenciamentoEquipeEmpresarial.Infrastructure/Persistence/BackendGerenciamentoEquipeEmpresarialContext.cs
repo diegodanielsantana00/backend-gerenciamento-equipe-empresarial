@@ -44,6 +44,8 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<StatusTask> StatusTasks { get; set; }
+        public DbSet<TaskApp> TaskApps { get; set; }
         public DbSet<GroupPermission> GroupPermissions { get; set; }
     }
 }

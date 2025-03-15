@@ -4,6 +4,7 @@ using BackendGerenciamentoEquipeEmpresarial.Application.Settings;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces;
 using BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence;
 using BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -14,8 +15,10 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSet
 builder.Services.AddControllers();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
+builder.Services.AddScoped<ITaskAppService, TaskAppServices>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITaskAppRepository, TaskAppRepository>();
 builder.Services.AddScoped<IGroupPermissionRepository, GroupPermissionRepository>();
 
 builder.Services.AddAuthentication("Bearer")
@@ -34,6 +37,14 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+});
+
+builder.Services.AddAuthorization();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -48,6 +59,16 @@ builder.Services.AddSwaggerGen(c =>
             Email = "diegodanielsantana00@gmail.com",
             Url = new Uri("https://diegodanielsantana.me")
         }
+    });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Insira o token JWT desta forma: Bearer {seu_token}"
     });
 });
 

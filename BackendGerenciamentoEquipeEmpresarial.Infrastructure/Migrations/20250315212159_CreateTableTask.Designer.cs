@@ -3,6 +3,7 @@ using BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
 {
     [DbContext(typeof(BackendGerenciamentoEquipeEmpresarialContext))]
-    partial class BackendGerenciamentoEquipeEmpresarialContextModelSnapshot : ModelSnapshot
+    [Migration("20250315212159_CreateTableTask")]
+    partial class CreateTableTask
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,7 +1,4 @@
 ﻿
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
 namespace BackendGerenciamentoEquipeEmpresarial.Domain.Entities
 {
     public class GroupPermission
