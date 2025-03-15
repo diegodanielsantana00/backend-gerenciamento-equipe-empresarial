@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
 {
     [DbContext(typeof(BackendGerenciamentoEquipeEmpresarialContext))]
-    [Migration("20250315201622_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250315231857_InicialMigration")]
+    partial class InicialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -70,6 +70,69 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         });
                 });
 
+            modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.StatusTask", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("order")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("StatusTasks");
+                });
+
+            modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.TaskApp", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PriorityTask")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StatusTaskId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserCreatedId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserResponsibleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StatusTaskId");
+
+                    b.HasIndex("UserCreatedId");
+
+                    b.HasIndex("UserResponsibleId");
+
+                    b.ToTable("TaskApps");
+                });
+
             modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -98,6 +161,33 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                     b.HasIndex("GroupPermissionId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.TaskApp", b =>
+                {
+                    b.HasOne("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.StatusTask", "StatusTask")
+                        .WithMany()
+                        .HasForeignKey("StatusTaskId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.User", "UserCreated")
+                        .WithMany()
+                        .HasForeignKey("UserCreatedId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.User", "UserResponsible")
+                        .WithMany()
+                        .HasForeignKey("UserResponsibleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("StatusTask");
+
+                    b.Navigation("UserCreated");
+
+                    b.Navigation("UserResponsible");
                 });
 
             modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.User", b =>

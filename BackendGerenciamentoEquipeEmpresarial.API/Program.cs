@@ -16,8 +16,10 @@ builder.Services.AddControllers();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 builder.Services.AddScoped<ITaskAppService, TaskAppServices>();
+builder.Services.AddScoped<IStatusTaskService, StatusTaskService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IStatusTaskRepository, StatusTaskRepository>();
 builder.Services.AddScoped<ITaskAppRepository, TaskAppRepository>();
 builder.Services.AddScoped<IGroupPermissionRepository, GroupPermissionRepository>();
 

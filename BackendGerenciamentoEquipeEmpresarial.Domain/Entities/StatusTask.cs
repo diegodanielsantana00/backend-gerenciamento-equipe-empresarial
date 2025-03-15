@@ -6,7 +6,8 @@ namespace BackendGerenciamentoEquipeEmpresarial.Domain.Entities
 {
     public class StatusTask
     {
-       
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public virtual int Id { get; set; }
         public virtual string Name { get; set; } = string.Empty;
         public virtual int order { get; set; }

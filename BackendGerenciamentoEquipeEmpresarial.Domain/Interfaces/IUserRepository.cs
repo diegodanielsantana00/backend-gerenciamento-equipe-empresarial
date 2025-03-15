@@ -6,6 +6,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces
     {
         Task<User> Save(User User);
         Task<User> GetByEmail(string email);
+        Task<User> GetById(int id);
         Task<User> GetByEmailAndPassword(string email, string password);
         
     }

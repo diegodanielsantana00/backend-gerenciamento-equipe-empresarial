@@ -21,7 +21,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
         public async Task<IActionResult> CreateOrUpdate([FromBody] StatusTask request)
         {
 
-            if (request.Id == 0 && request.Id == null)
+            if (request.Id == 0 || request.Id == null)
             {
                 StatusTask taskAppSave = await _statusTaskService.Create(request);
                 if (taskAppSave != null)

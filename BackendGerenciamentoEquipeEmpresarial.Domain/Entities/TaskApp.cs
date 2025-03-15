@@ -1,11 +1,15 @@
 ﻿
 using BackendGerenciamentoEquipeEmpresarial.Domain.Enum;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 
 namespace BackendGerenciamentoEquipeEmpresarial.Domain.Entities
 {
     public class TaskApp
     {
-        public virtual int Id { get; set; }
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public virtual int? Id { get; set; }
         public virtual string Name { get; set; } = string.Empty;
         public virtual string Title { get; set; }
         public virtual string Description { get; set; }

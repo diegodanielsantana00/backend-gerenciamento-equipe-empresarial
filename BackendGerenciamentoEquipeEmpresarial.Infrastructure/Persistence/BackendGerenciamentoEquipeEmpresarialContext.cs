@@ -19,7 +19,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence
 
             modelBuilder.Entity<GroupPermission>()
                 .Property(g => g.Id)
-                .ValueGeneratedNever(); 
+                .ValueGeneratedNever();
 
             modelBuilder.Entity<GroupPermission>().HasData(
             new GroupPermission

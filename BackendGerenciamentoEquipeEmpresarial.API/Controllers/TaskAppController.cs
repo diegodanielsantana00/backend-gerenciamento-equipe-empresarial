@@ -2,6 +2,7 @@
 using BackendGerenciamentoEquipeEmpresarial.Application.Interfaces;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Entities;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Enum;
+using BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
@@ -14,10 +15,13 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
     public class TaskAppController : ControllerBase
     {
         private readonly ITaskAppService _taskAppService;
-
-        public TaskAppController(ITaskAppService taskAppService)
+        private readonly IUserRepository _userRepository;
+        private readonly IStatusTaskRepository _statusTaskRepository;
+        public TaskAppController(ITaskAppService taskAppService, IUserRepository userRepository, IStatusTaskRepository statusTaskRepository)
         {
             _taskAppService = taskAppService;
+            _userRepository = userRepository;
+            _statusTaskRepository = statusTaskRepository;
         }
 
         [Authorize]
@@ -31,12 +35,15 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
                 Id = request.Id,
                 Title = request.Title,
                 Description = request.Description,
-                UserCreated = new User() { Id = request.UserCreated },
-                UserResponsible = new User() { Id = request.UserResponsible },
+                StatusTask = await _statusTaskRepository.GetById(request.StatusTask),
+                UserCreated = await _userRepository.GetById(request.UserCreated),
+                UserResponsible = await _userRepository.GetById(request.UserResponsible),
                 PriorityTask = priority
             };
-            if (taskApp.Id == 0 && taskApp.Id == null)
+
+            if (taskApp.Id == 0 || taskApp.Id == null)
             {
+                taskApp.Id = null;
                 TaskApp taskAppSave = await _taskAppService.Create(taskApp);
                 if (taskAppSave != null)
                 {

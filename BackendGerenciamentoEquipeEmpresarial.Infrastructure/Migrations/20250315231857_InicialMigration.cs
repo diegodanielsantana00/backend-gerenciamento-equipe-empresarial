@@ -2,14 +2,32 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateTableTask : Migration
+    public partial class InicialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "GroupPermissions",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
+                    TaskPermissionEdit = table.Column<bool>(type: "bit", nullable: false),
+                    TaskPermissionDelete = table.Column<bool>(type: "bit", nullable: false),
+                    TaskPermissionInsert = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupPermissions", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "StatusTasks",
                 columns: table => new
@@ -22,6 +40,28 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_StatusTasks", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    GroupPermissionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Users_GroupPermissions_GroupPermissionId",
+                        column: x => x.GroupPermissionId,
+                        principalTable: "GroupPermissions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -46,19 +86,28 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         column: x => x.StatusTaskId,
                         principalTable: "StatusTasks",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_TaskApps_Users_UserCreatedId",
                         column: x => x.UserCreatedId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_TaskApps_Users_UserResponsibleId",
                         column: x => x.UserResponsibleId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                });
+
+            migrationBuilder.InsertData(
+                table: "GroupPermissions",
+                columns: new[] { "Id", "IsAdmin", "Name", "TaskPermissionDelete", "TaskPermissionEdit", "TaskPermissionInsert" },
+                values: new object[,]
+                {
+                    { 1, true, "Admin", true, true, true },
+                    { 2, false, "Membro", true, true, true }
                 });
 
             migrationBuilder.CreateIndex(
@@ -75,6 +124,11 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                 name: "IX_TaskApps_UserResponsibleId",
                 table: "TaskApps",
                 column: "UserResponsibleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_GroupPermissionId",
+                table: "Users",
+                column: "GroupPermissionId");
         }
 
         /// <inheritdoc />
@@ -85,6 +139,12 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "StatusTasks");
+
+            migrationBuilder.DropTable(
+                name: "Users");
+
+            migrationBuilder.DropTable(
+                name: "GroupPermissions");
         }
     }
 }

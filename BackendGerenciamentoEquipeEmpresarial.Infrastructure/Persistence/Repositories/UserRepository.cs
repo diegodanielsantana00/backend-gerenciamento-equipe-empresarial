@@ -45,7 +45,20 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repos
             return null;
         }
 
+        public async Task<User> GetById(int id)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (user != null)
+            {
+                return user;
+            }
+
+            return null;
+        }
         
+
+
 
     }
 }
