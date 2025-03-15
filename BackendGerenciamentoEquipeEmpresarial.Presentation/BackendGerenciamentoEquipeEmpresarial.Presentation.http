@@ -1,6 +1,0 @@
-@BackendGerenciamentoEquipeEmpresarial.Presentation_HostAddress = http://localhost:5062
-
-GET {{BackendGerenciamentoEquipeEmpresarial.Presentation_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

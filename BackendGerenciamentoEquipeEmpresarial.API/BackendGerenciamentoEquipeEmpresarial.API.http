@@ -1,0 +1,6 @@
+@BackendGerenciamentoEquipeEmpresarial.API_HostAddress = http://localhost:5191
+
+GET {{BackendGerenciamentoEquipeEmpresarial.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
