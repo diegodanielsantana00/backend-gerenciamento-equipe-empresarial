@@ -1,9 +1,13 @@
-﻿namespace BackendGerenciamentoEquipeEmpresarial.Application.Interfaces
+﻿using BackendGerenciamentoEquipeEmpresarial.Domain.Entities;
+
+namespace BackendGerenciamentoEquipeEmpresarial.Application.Interfaces
 {
     public interface IAuthServices
     {
-        string GenerateToken();
-        Task<bool> Register();
+        Task<User> Register(User user);
+        Task<User> Login(string email, string password);
+        Task<bool> IsRegisterWithEmail(string email);
+        
 
     }
 }

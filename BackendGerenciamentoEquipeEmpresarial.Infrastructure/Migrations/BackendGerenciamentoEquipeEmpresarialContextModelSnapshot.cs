@@ -24,10 +24,10 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
             modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.GroupPermission", b =>
                 {
                     b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -45,6 +45,26 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("GroupPermissions");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsAdmin = true,
+                            Name = "Admin",
+                            TaskPermissionDelete = true,
+                            TaskPermissionEdit = true,
+                            TaskPermissionInsert = true
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsAdmin = false,
+                            Name = "Membro",
+                            TaskPermissionDelete = true,
+                            TaskPermissionEdit = true,
+                            TaskPermissionInsert = true
+                        });
                 });
 
             modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.User", b =>

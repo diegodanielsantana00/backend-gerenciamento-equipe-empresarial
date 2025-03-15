@@ -1,17 +1,42 @@
 ﻿using BackendGerenciamentoEquipeEmpresarial.Application.Interfaces;
+using BackendGerenciamentoEquipeEmpresarial.Application.Settings;
+using BackendGerenciamentoEquipeEmpresarial.Domain.Entities;
+using BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace BackendGerenciamentoEquipeEmpresarial.Application.Services
 {
     public class AuthServices : IAuthServices
     {
-        public string GenerateToken()
+        private readonly IUserRepository _userRepository;
+        private readonly IGroupPermissionRepository _groupPermissionRepository;
+
+        public AuthServices(IUserRepository userRepository, IGroupPermissionRepository groupPermissionRepository)
         {
-            throw new NotImplementedException();
+            _userRepository = userRepository;
+            _groupPermissionRepository = groupPermissionRepository;
+        }
+        public async Task<bool> IsRegisterWithEmail(string email)
+        {
+            User user = await _userRepository.GetByEmail(email);
+            return user != null;
+        }
+        
+        public async Task<User> Register(User user)
+        {
+            user.GroupPermission = await _groupPermissionRepository.GetById(user.GroupPermission.Id);
+            return await _userRepository.Save(user);
         }
 
-        public Task<bool> Register()
+        public async Task<User> Login(string email, string password)
         {
-            throw new NotImplementedException();
+            string passwordCripto = BCrypt.Net.BCrypt.HashPassword(password); ;
+            User user =  await _userRepository.GetByEmail(email);
+            if (user != null && user.CheckPassword(password))
+            {
+                return user;
+            }
+            return null;
         }
     }
 }

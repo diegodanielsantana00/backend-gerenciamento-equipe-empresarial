@@ -2,6 +2,8 @@
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -14,9 +16,9 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                 name: "GroupPermissions",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
                     TaskPermissionEdit = table.Column<bool>(type: "bit", nullable: false),
                     TaskPermissionDelete = table.Column<bool>(type: "bit", nullable: false),
                     TaskPermissionInsert = table.Column<bool>(type: "bit", nullable: false)
@@ -46,6 +48,15 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         principalTable: "GroupPermissions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "GroupPermissions",
+                columns: new[] { "Id", "IsAdmin", "Name", "TaskPermissionDelete", "TaskPermissionEdit", "TaskPermissionInsert" },
+                values: new object[,]
+                {
+                    { 1, true, "Admin", true, true, true },
+                    { 2, false, "Membro", true, true, true }
                 });
 
             migrationBuilder.CreateIndex(

@@ -16,6 +16,7 @@ builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IGroupPermissionRepository, GroupPermissionRepository>();
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>
