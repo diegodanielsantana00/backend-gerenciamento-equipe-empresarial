@@ -8,6 +8,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces
         Task<TaskApp> Update(TaskApp task);
         Task<TaskApp> GetById(int id);
         Task<List<TaskApp>> GetAllTask(int idProject, int page, int status, int orderBy);
+        Task Delete(int id);
 
 
     }

@@ -61,6 +61,16 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repos
                 .Take(pageSize)
                 .ToListAsync();
         }
+        public async Task Delete(int id)
+        {
+            var user = await _context.TaskApps.FirstOrDefaultAsync(p => p.Id == id);
+
+            if (user != null)
+            {
+                _context.TaskApps.Remove(user);
+                await _context.SaveChangesAsync();
+            }
+        }
 
 
     }

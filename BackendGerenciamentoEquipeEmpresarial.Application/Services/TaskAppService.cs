@@ -1,7 +1,6 @@
 ﻿using BackendGerenciamentoEquipeEmpresarial.Application.Interfaces;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Entities;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces;
-using System.Threading.Tasks;
 
 namespace BackendGerenciamentoEquipeEmpresarial.Application.Services
 {
@@ -37,6 +36,9 @@ namespace BackendGerenciamentoEquipeEmpresarial.Application.Services
             return await _taskAppRepository.GetAllTask(idProject, page, status, orderBy);
         }
 
-        
+        public async Task Delete(int id)
+        {
+             await _taskAppRepository.Delete(id);
+        }
     }
 }

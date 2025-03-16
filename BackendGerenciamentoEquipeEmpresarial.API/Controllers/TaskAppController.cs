@@ -90,5 +90,15 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
 
         }
 
+
+        [Authorize]
+        [HttpDelete("delete")]
+        public async Task<IActionResult> delete(int id)
+        {
+            await _taskAppService.Delete(id);
+            return Ok(new { success = true, msg = "Deletado com sucesso." });
+
+        }
+
     }
 }

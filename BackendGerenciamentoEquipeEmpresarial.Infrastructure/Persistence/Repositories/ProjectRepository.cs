@@ -2,7 +2,6 @@
 using BackendGerenciamentoEquipeEmpresarial.Domain.Entities;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repositories
 {
@@ -64,5 +63,6 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repos
             var projectsList = await _context.UserProjects.Include(x => x.Project).Include(x => x.User).Where(p => p.Project.Id == idProject).ToListAsync();
             return projectsList;
         }
+    
     }
 }

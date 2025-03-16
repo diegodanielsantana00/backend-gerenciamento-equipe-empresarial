@@ -56,9 +56,6 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repos
 
             return null;
         }
-        
-
-
 
     }
 }
