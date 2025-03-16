@@ -32,7 +32,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
                 if (!(await _authService.IsRegisterWithEmail(request.Email)))
                 {
 
-                    User userSave = new User() { Email = request.Email, GroupPermission = new GroupPermission() { Id = 1 }, Name = request.Name };
+                    User userSave = new User() { Email = request.Email, Name = request.Name };
                     userSave.SetPassword(request.Password);
                     userSave = await _authService.Register(userSave);
                     var token = _jwtService.GenerateToken(userSave.Id.ToString(), "Membro");
@@ -54,7 +54,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
 
             if (user != null)
             {
-                var token = _jwtService.GenerateToken(user.Id.ToString(), user.GroupPermission.Name);
+                var token = _jwtService.GenerateToken(user.Id.ToString(), "Admin");
                 return Ok(new { success = true, token });
             }
 

@@ -26,25 +26,21 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence
             {
                 Id = 1,
                 Name = "Admin",
-                IsAdmin = true,
-                TaskPermissionEdit = true,
-                TaskPermissionDelete = true,
-                TaskPermissionInsert = true
+                IsAdmin = true
             },
             new GroupPermission
             {
                 Id = 2,
                 Name = "Membro",
-                IsAdmin = false,
-                TaskPermissionEdit = true,
-                TaskPermissionDelete = true,
-                TaskPermissionInsert = true
+                IsAdmin = false
             }
         );
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<StatusTask> StatusTasks { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<UserProject> UserProjects { get; set; }
         public DbSet<TaskApp> TaskApps { get; set; }
         public DbSet<GroupPermission> GroupPermissions { get; set; }
     }

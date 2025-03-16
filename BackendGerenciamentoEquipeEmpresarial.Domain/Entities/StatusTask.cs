@@ -11,6 +11,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Domain.Entities
         public virtual int Id { get; set; }
         public virtual string Name { get; set; } = string.Empty;
         public virtual int order { get; set; }
+        public virtual Project Project { get; set; }
 
     }
 }

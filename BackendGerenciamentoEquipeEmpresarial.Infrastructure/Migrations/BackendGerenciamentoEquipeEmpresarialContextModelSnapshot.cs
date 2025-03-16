@@ -33,15 +33,6 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("TaskPermissionDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("TaskPermissionEdit")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("TaskPermissionInsert")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.ToTable("GroupPermissions");
@@ -51,20 +42,39 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         {
                             Id = 1,
                             IsAdmin = true,
-                            Name = "Admin",
-                            TaskPermissionDelete = true,
-                            TaskPermissionEdit = true,
-                            TaskPermissionInsert = true
+                            Name = "Admin"
                         },
                         new
                         {
                             Id = 2,
                             IsAdmin = false,
-                            Name = "Membro",
-                            TaskPermissionDelete = true,
-                            TaskPermissionEdit = true,
-                            TaskPermissionInsert = true
+                            Name = "Membro"
                         });
+                });
+
+            modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.Project", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("Active")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserOnwerId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserOnwerId");
+
+                    b.ToTable("Projects");
                 });
 
             modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.StatusTask", b =>
@@ -79,10 +89,15 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<int>("order")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.ToTable("StatusTasks");
                 });
@@ -106,6 +121,9 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                     b.Property<int>("PriorityTask")
                         .HasColumnType("int");
 
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
                     b.Property<int>("StatusTaskId")
                         .HasColumnType("int");
 
@@ -120,6 +138,8 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ProjectId");
 
                     b.HasIndex("StatusTaskId");
 
@@ -142,9 +162,6 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("GroupPermissionId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -155,13 +172,67 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.UserProject", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("GroupPermissionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProjectId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
                     b.HasIndex("GroupPermissionId");
 
-                    b.ToTable("Users");
+                    b.HasIndex("ProjectId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserProjects");
+                });
+
+            modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.Project", b =>
+                {
+                    b.HasOne("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.User", "UserOnwer")
+                        .WithMany()
+                        .HasForeignKey("UserOnwerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("UserOnwer");
+                });
+
+            modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.StatusTask", b =>
+                {
+                    b.HasOne("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.TaskApp", b =>
                 {
+                    b.HasOne("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.StatusTask", "StatusTask")
                         .WithMany()
                         .HasForeignKey("StatusTaskId")
@@ -180,6 +251,8 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.Navigation("Project");
+
                     b.Navigation("StatusTask");
 
                     b.Navigation("UserCreated");
@@ -187,7 +260,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                     b.Navigation("UserResponsible");
                 });
 
-            modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.User", b =>
+            modelBuilder.Entity("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.UserProject", b =>
                 {
                     b.HasOne("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.GroupPermission", "GroupPermission")
                         .WithMany()
@@ -195,7 +268,23 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.Project", "Project")
+                        .WithMany()
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("BackendGerenciamentoEquipeEmpresarial.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("GroupPermission");
+
+                    b.Navigation("Project");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

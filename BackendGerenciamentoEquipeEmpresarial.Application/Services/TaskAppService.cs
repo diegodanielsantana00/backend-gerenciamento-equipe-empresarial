@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 
 namespace BackendGerenciamentoEquipeEmpresarial.Application.Services
 {
-    public class TaskAppServices : ITaskAppService
+    public class TaskService : ITaskAppService
     {
         private readonly ITaskAppRepository _taskAppRepository;
 
-        public TaskAppServices(ITaskAppRepository taskAppRepository)
+        public TaskService(ITaskAppRepository taskAppRepository)
         {
             _taskAppRepository = taskAppRepository;
         }

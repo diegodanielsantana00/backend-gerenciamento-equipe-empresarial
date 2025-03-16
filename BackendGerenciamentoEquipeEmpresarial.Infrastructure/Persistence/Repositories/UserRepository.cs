@@ -23,7 +23,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repos
 
         public async Task<User> GetByEmail(string email)
         {
-            var user = await _context.Users.Include(x=> x.GroupPermission).FirstOrDefaultAsync(p => p.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(p => p.Email == email);
 
             if (user != null)
             {

@@ -36,7 +36,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
                 Title = request.Title,
                 Description = request.Description,
                 StatusTask = await _statusTaskRepository.GetById(request.StatusTask),
-                UserCreated = await _userRepository.GetById(request.UserCreated),
+                UserCreated = await _userRepository.GetById(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value)),
                 UserResponsible = await _userRepository.GetById(request.UserResponsible),
                 PriorityTask = priority
             };

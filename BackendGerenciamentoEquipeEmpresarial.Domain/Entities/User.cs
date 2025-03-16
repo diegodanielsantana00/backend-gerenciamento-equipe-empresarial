@@ -15,7 +15,6 @@ namespace BackendGerenciamentoEquipeEmpresarial.Domain.Entities
         public virtual string Name { get; set; }
         public virtual string Email { get; set; }
         public virtual string Password { get; private set; }
-        public virtual GroupPermission GroupPermission { get; set; }
 
         public void SetPassword(string password)
         {

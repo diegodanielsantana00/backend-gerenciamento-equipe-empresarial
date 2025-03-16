@@ -16,6 +16,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Domain.Entities
         public virtual User UserCreated { get; set; }
         public virtual User UserResponsible { get; set; }
         public virtual StatusTask StatusTask { get; set; }
+        public virtual Project Project { get; set; }
         public virtual PriorityTaskEnum PriorityTask { get; set; }
         
 

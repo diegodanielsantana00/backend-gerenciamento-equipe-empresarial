@@ -1,8 +1,6 @@
 ﻿using BackendGerenciamentoEquipeEmpresarial.Application.Interfaces;
-using BackendGerenciamentoEquipeEmpresarial.Application.Settings;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Entities;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces;
-using Microsoft.Extensions.Options;
 
 namespace BackendGerenciamentoEquipeEmpresarial.Application.Services
 {
@@ -24,7 +22,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Application.Services
         
         public async Task<User> Register(User user)
         {
-            user.GroupPermission = await _groupPermissionRepository.GetById(user.GroupPermission.Id);
+            //user.GroupPermission = await _groupPermissionRepository.GetById(user.GroupPermission.Id);
             return await _userRepository.Save(user);
         }
 

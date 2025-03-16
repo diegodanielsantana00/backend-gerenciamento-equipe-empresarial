@@ -18,28 +18,11 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsAdmin = table.Column<bool>(type: "bit", nullable: false),
-                    TaskPermissionEdit = table.Column<bool>(type: "bit", nullable: false),
-                    TaskPermissionDelete = table.Column<bool>(type: "bit", nullable: false),
-                    TaskPermissionInsert = table.Column<bool>(type: "bit", nullable: false)
+                    IsAdmin = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_GroupPermissions", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "StatusTasks",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    order = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_StatusTasks", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,18 +33,86 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    GroupPermissionId = table.Column<int>(type: "int", nullable: false)
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Projects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserOnwerId = table.Column<int>(type: "int", nullable: false),
+                    Active = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Projects", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_GroupPermissions_GroupPermissionId",
+                        name: "FK_Projects_Users_UserOnwerId",
+                        column: x => x.UserOnwerId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "StatusTasks",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    order = table.Column<int>(type: "int", nullable: false),
+                    ProjectId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StatusTasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_StatusTasks_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserProjects",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ProjectId = table.Column<int>(type: "int", nullable: false),
+                    GroupPermissionId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserProjects", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserProjects_GroupPermissions_GroupPermissionId",
                         column: x => x.GroupPermissionId,
                         principalTable: "GroupPermissions",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_UserProjects_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
+                    table.ForeignKey(
+                        name: "FK_UserProjects_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -76,11 +127,18 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                     UserCreatedId = table.Column<int>(type: "int", nullable: false),
                     UserResponsibleId = table.Column<int>(type: "int", nullable: false),
                     StatusTaskId = table.Column<int>(type: "int", nullable: false),
+                    ProjectId = table.Column<int>(type: "int", nullable: false),
                     PriorityTask = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TaskApps", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_TaskApps_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_TaskApps_StatusTasks_StatusTaskId",
                         column: x => x.StatusTaskId,
@@ -103,12 +161,27 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "GroupPermissions",
-                columns: new[] { "Id", "IsAdmin", "Name", "TaskPermissionDelete", "TaskPermissionEdit", "TaskPermissionInsert" },
+                columns: new[] { "Id", "IsAdmin", "Name" },
                 values: new object[,]
                 {
-                    { 1, true, "Admin", true, true, true },
-                    { 2, false, "Membro", true, true, true }
+                    { 1, true, "Admin" },
+                    { 2, false, "Membro" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Projects_UserOnwerId",
+                table: "Projects",
+                column: "UserOnwerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StatusTasks_ProjectId",
+                table: "StatusTasks",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_TaskApps_ProjectId",
+                table: "TaskApps",
+                column: "ProjectId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TaskApps_StatusTaskId",
@@ -126,9 +199,19 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                 column: "UserResponsibleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_GroupPermissionId",
-                table: "Users",
+                name: "IX_UserProjects_GroupPermissionId",
+                table: "UserProjects",
                 column: "GroupPermissionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProjects_ProjectId",
+                table: "UserProjects",
+                column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserProjects_UserId",
+                table: "UserProjects",
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -138,13 +221,19 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                 name: "TaskApps");
 
             migrationBuilder.DropTable(
+                name: "UserProjects");
+
+            migrationBuilder.DropTable(
                 name: "StatusTasks");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "GroupPermissions");
 
             migrationBuilder.DropTable(
-                name: "GroupPermissions");
+                name: "Projects");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }

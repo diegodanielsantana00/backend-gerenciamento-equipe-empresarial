@@ -15,13 +15,15 @@ builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSet
 builder.Services.AddControllers();
 builder.Services.AddScoped<IJwtService, JwtService>();
 builder.Services.AddScoped<IAuthServices, AuthServices>();
-builder.Services.AddScoped<ITaskAppService, TaskAppServices>();
+builder.Services.AddScoped<ITaskAppService, TaskService>();
 builder.Services.AddScoped<IStatusTaskService, StatusTaskService>();
+builder.Services.AddScoped<IProjectService, ProjectService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IStatusTaskRepository, StatusTaskRepository>();
 builder.Services.AddScoped<ITaskAppRepository, TaskAppRepository>();
 builder.Services.AddScoped<IGroupPermissionRepository, GroupPermissionRepository>();
+builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 
 builder.Services.AddAuthentication("Bearer")
     .AddJwtBearer(options =>

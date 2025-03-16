@@ -1,15 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BackendGerenciamentoEquipeEmpresarial.Domain.Enum
+﻿namespace BackendGerenciamentoEquipeEmpresarial.Domain.Enum
 {
-    public enum PriorityTaskEnum
+    public enum ActiveEnum
     {
-        HIGH = 1,
-        MEDIUM = 2,
-        LOW = 3,
+        ACTIVE = 1,
+        DISABLED = 2,
     }
 }
