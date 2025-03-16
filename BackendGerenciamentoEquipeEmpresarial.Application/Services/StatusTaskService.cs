@@ -23,5 +23,10 @@ namespace BackendGerenciamentoEquipeEmpresarial.Application.Services
             return _statusTaskRepository.Update(task);
         }
 
+        public async Task<IEnumerable<StatusTask>> GetAllStatusByProject(int idProject)
+        {
+            return await _statusTaskRepository.GetAllStatusByProject(idProject);
+        }
+
     }
 }

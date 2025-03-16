@@ -79,7 +79,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         column: x => x.ProjectId,
                         principalTable: "Projects",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                 });
 
             migrationBuilder.CreateTable(
@@ -156,7 +156,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Migrations
                         column: x => x.UserResponsibleId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(

@@ -38,5 +38,13 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repos
             return null;
         }
 
+        public async Task<IEnumerable<StatusTask>> GetAllStatusByProject(int idProject)
+        {
+            var user = await _context.StatusTasks.Include(x=> x.Project).Where(p => p.Project.Id == idProject).ToListAsync();
+            return user;
+        }
+
+        
+
     }
 }

@@ -33,12 +33,17 @@ namespace BackendGerenciamentoEquipeEmpresarial.Application.Services
                var groupPemission = await _groupPermissionRepository.GetById(1);
                await _projectRepository.AddUserInProject(project.UserOnwer, project, groupPemission);
             }
-            return await _projectRepository.Save(project);
+            return projectSave;
         }
 
         public async Task<Project> Update(Project project)
         {
             return await _projectRepository.Update(project);
+        }
+
+        public async Task<Project> GetProjectById(int id)
+        {
+            return await _projectRepository.GetProjectById(id);
         }
     }
 }

@@ -60,14 +60,14 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
             }
 
 
-                return BadRequest(new { success = false, message = "Credenciais inválidas" });
+            return BadRequest(new { success = false, message = "Credenciais inválidas" });
         }
 
         [Authorize]
         [HttpPatch("updateStatus")]
         public async Task<IActionResult> updateStatus([FromBody] int idTask, int status)
         {
-            
+
             if (await _taskAppService.UpdateStatus(idTask, status))
             {
                 return Ok(new { success = true, msg = "Status da tarefa atualizada com sucesso!" });
@@ -76,13 +76,5 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
             return BadRequest(new { success = false, message = "Credenciais inválidas" });
         }
 
-        //
-        //[HttpGet("me")]
-        //public IActionResult GetUser()
-        //{
-        //    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //    var role = User.FindFirst(ClaimTypes.Role)?.Value;
-        //    return Ok(new { userId, role });
-        //}
     }
 }

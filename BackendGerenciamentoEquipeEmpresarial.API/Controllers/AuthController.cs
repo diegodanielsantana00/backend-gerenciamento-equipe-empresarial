@@ -1,6 +1,7 @@
 ﻿using BackendGerenciamentoEquipeEmpresarial.API.Requests;
 using BackendGerenciamentoEquipeEmpresarial.Application.Interfaces;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Entities;
+using BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -13,11 +14,13 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
     {
         private readonly IJwtService _jwtService;
         private readonly IAuthServices _authService;
+        private readonly IUserRepository _userRepository;
 
-        public AuthController(IJwtService jwtService, IAuthServices authService)
+        public AuthController(IJwtService jwtService, IAuthServices authService, IUserRepository userRepository)
         {
             _jwtService = jwtService;
             _authService = authService;
+            _userRepository = userRepository;
         }
 
         [HttpPost("register")]
@@ -61,13 +64,14 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
             return Unauthorized(new { success = false, message = "Credenciais inválidas" });
         }
 
-        //[Authorize]
-        //[HttpGet("me")]
-        //public IActionResult GetUser()
-        //{
-        //    var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //    var role = User.FindFirst(ClaimTypes.Role)?.Value;
-        //    return Ok(new { userId, role });
-        //}
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> GetUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+            var user = await _userRepository.GetById(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
+            return Ok(new { success = true, user });
+        }
     }
 }

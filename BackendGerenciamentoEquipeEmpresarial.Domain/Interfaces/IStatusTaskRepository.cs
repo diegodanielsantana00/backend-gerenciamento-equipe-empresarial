@@ -7,6 +7,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces
         Task<StatusTask> Create(StatusTask task);
         Task<StatusTask> Update(StatusTask task);
         Task<StatusTask> GetById(int id);
+        Task<IEnumerable<StatusTask>> GetAllStatusByProject(int idProject);
         
     }
 }

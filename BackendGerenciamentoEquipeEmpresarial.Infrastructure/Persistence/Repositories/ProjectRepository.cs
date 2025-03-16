@@ -2,6 +2,7 @@
 using BackendGerenciamentoEquipeEmpresarial.Domain.Entities;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 
 namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repositories
 {
@@ -47,5 +48,16 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repos
             await _context.SaveChangesAsync();
             return userProject;
         }
+        public async Task<Project> GetProjectById(int id)
+        {
+            var user = await _context.Projects.FirstOrDefaultAsync(x => x.Id == id);
+            if (user != null)
+            {
+                return user;
+            }
+            return null;
+        }
+
+        
     }
 }

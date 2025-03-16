@@ -1,6 +1,7 @@
 ﻿using BackendGerenciamentoEquipeEmpresarial.API.Requests;
 using BackendGerenciamentoEquipeEmpresarial.Application.Interfaces;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Entities;
+using BackendGerenciamentoEquipeEmpresarial.Domain.Enum;
 using BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,12 +26,14 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
         [HttpPost("createOrUpdate")]
         public async Task<IActionResult> CreateOrUpdate([FromBody] CreateProjectRequest request)
         {
+            Enum.TryParse<ActiveEnum>(request.Active.ToString(), true, out ActiveEnum active);
+
 
             Project project = new Project()
             {
                 Id = request.Id,
                 UserOnwer = await _userRepository.GetById(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value)),
-                Active = request.Active,
+                Active = active,
                 Name = request.Name
             };
 
@@ -60,9 +63,9 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
         [HttpGet("getAllByUser")]
         public async Task<IActionResult> getAllByUser()
         {
-
-
-            return BadRequest(new { success = false, message = "Credenciais inválidas" });
+            var UserOnwer = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var projects = await _projectService.GetAllByIdUser(UserOnwer);
+            return Ok(new { success = true, projects });
         }
 
 

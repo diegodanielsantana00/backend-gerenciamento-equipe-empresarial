@@ -41,6 +41,17 @@ builder.Services.AddAuthentication("Bearer")
         };
     });
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:4200")
+                   .AllowAnyHeader()
+                   .AllowAnyMethod();
+        });
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -91,6 +102,7 @@ if (app.Environment.IsDevelopment())
     });
 }
 
+app.UseCors("AllowSpecificOrigin");
 app.UseHttpsRedirection();
 app.MapControllers();
 app.Run();

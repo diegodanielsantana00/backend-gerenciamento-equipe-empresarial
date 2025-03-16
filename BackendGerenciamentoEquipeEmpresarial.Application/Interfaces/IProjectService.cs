@@ -7,6 +7,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Application.Interfaces
         Task<Project> Save(Project project);
         Task<Project> Update(Project project);
         Task<IEnumerable<Project>> GetAllByIdUser(int idUser);
+        Task<Project> GetProjectById(int idProject);
         Task<UserProject> AddUserInProject(User user, Project project, GroupPermission groupPermission);
     }
 }
