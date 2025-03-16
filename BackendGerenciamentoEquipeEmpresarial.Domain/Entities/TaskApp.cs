@@ -13,6 +13,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Domain.Entities
         public virtual string Name { get; set; } = string.Empty;
         public virtual string Title { get; set; }
         public virtual string Description { get; set; }
+        public virtual int StoryPoints { get; set; }
         public virtual User UserCreated { get; set; }
         public virtual User UserResponsible { get; set; }
         public virtual StatusTask StatusTask { get; set; }

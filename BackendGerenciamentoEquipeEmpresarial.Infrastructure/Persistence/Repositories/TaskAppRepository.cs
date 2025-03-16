@@ -38,5 +38,30 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repos
             return null;
         }
 
+        public async Task<List<TaskApp>> GetAllTask(int idProject, int page, int status, int orderBy)
+        {
+            int pageSize = 10;
+
+            var query = _context.TaskApps.Include(x=> x.StatusTask).Include(x=> x.Project).Where(x=> x.Project.Id == idProject).AsQueryable();
+
+            if (status != -1)
+            {
+                query = query.Where(t => t.StatusTask.Id == status);
+            }
+
+            query = orderBy switch
+            {
+                1 => query.OrderBy(t => t.Title),
+                2 => query.OrderByDescending(t => t.PriorityTask),
+                _ => query.OrderBy(t => t.Id)
+            };
+
+            return await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+        }
+
+
     }
 }

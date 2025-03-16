@@ -9,6 +9,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Domain.Interfaces
         Task<Project> GetProjectById(int id);
         Task<IEnumerable<Project>> GetAllByIdUser(int idUser);
         Task<UserProject> AddUserInProject(User user, Project project, GroupPermission groupPermission);
+        Task<IEnumerable<UserProject>> GetUserProjectByProject(int idProject);
 
     }
 }

@@ -45,5 +45,11 @@ namespace BackendGerenciamentoEquipeEmpresarial.Application.Services
         {
             return await _projectRepository.GetProjectById(id);
         }
+
+        public async Task<IEnumerable<UserProject>> GetUserProjectByProject(int idProject)
+        {
+            return await _projectRepository.GetUserProjectByProject(idProject);
+        }
+
     }
 }

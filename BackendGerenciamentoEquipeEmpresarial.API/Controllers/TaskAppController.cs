@@ -15,10 +15,12 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
     public class TaskAppController : ControllerBase
     {
         private readonly ITaskAppService _taskAppService;
+        private readonly IProjectService _projectService;
         private readonly IUserRepository _userRepository;
         private readonly IStatusTaskRepository _statusTaskRepository;
-        public TaskAppController(ITaskAppService taskAppService, IUserRepository userRepository, IStatusTaskRepository statusTaskRepository)
+        public TaskAppController(ITaskAppService taskAppService, IUserRepository userRepository, IStatusTaskRepository statusTaskRepository, IProjectService projectService)
         {
+            _projectService = projectService;
             _taskAppService = taskAppService;
             _userRepository = userRepository;
             _statusTaskRepository = statusTaskRepository;
@@ -38,7 +40,9 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
                 StatusTask = await _statusTaskRepository.GetById(request.StatusTask),
                 UserCreated = await _userRepository.GetById(int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value)),
                 UserResponsible = await _userRepository.GetById(request.UserResponsible),
-                PriorityTask = priority
+                Project = await _projectService.GetProjectById(request.Project),
+                PriorityTask = priority,
+                StoryPoints = request.StoryPoints
             };
 
             if (taskApp.Id == 0 || taskApp.Id == null)
@@ -74,6 +78,16 @@ namespace BackendGerenciamentoEquipeEmpresarial.API.Controllers
             }
 
             return BadRequest(new { success = false, message = "Credenciais inválidas" });
+        }
+
+
+        [Authorize]
+        [HttpGet("GetAllTask")]
+        public async Task<IActionResult> GetAllTask(int idProject,int page, int status, int orderBy)
+        {
+            var tasksWithFilter = await _taskAppService.GetAllTask(idProject ,page, status, orderBy);
+            return Ok(new { success = true, tasks = tasksWithFilter });
+
         }
 
     }

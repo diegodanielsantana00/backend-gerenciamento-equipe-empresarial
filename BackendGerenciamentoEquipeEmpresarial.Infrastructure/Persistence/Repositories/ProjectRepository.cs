@@ -48,6 +48,7 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repos
             await _context.SaveChangesAsync();
             return userProject;
         }
+
         public async Task<Project> GetProjectById(int id)
         {
             var user = await _context.Projects.FirstOrDefaultAsync(x => x.Id == id);
@@ -58,6 +59,10 @@ namespace BackendGerenciamentoEquipeEmpresarial.Infrastructure.Persistence.Repos
             return null;
         }
 
-        
+        public async Task<IEnumerable<UserProject>> GetUserProjectByProject(int idProject)
+        {
+            var projectsList = await _context.UserProjects.Include(x => x.Project).Include(x => x.User).Where(p => p.Project.Id == idProject).ToListAsync();
+            return projectsList;
+        }
     }
 }

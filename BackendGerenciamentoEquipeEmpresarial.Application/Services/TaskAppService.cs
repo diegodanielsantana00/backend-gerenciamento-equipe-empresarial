@@ -31,5 +31,12 @@ namespace BackendGerenciamentoEquipeEmpresarial.Application.Services
             await _taskAppRepository.Update(task);
             return true;
         }
+
+        public async Task<List<TaskApp>> GetAllTask(int idProject, int page, int status, int orderBy)
+        {
+            return await _taskAppRepository.GetAllTask(idProject, page, status, orderBy);
+        }
+
+        
     }
 }
